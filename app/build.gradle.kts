@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    id ("kotlin-parcelize")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -70,7 +70,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation("androidx.compose.material:material-icons-core-desktop:1.6.0-beta01")
     implementation("androidx.compose.material:material-icons-extended-desktop:1.6.0-beta01")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")
 
@@ -81,9 +80,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // Hilt
-    implementation ("com.google.dagger:hilt-android:2.48")
-    kapt ("com.google.dagger:hilt-compiler:2.44.2")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.44.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     // LifeCycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
@@ -94,15 +93,19 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation ("com.google.code.gson:gson:2.10")
+    implementation("com.google.code.gson:gson:2.10")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     // Paging
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-compose:3.3.0-alpha02")
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    // Glide
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }
