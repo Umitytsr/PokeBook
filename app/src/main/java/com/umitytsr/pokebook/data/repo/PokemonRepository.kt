@@ -33,6 +33,8 @@ class PokemonRepository @Inject constructor(private val pokeBookApiService: Poke
         }
     }
 
+
+
     private fun extractPokemonNumber(url: String): Int {
         return if (url.endsWith("/")) {
             url.dropLast(1).takeLastWhile { it.isDigit() }.toInt()

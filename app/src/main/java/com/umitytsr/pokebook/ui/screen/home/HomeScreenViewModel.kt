@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(private val pokemonRepository: PokemonRepository): ViewModel(){
+class HomeScreenViewModel @Inject constructor(private val pokemonRepository: PokemonRepository) :
+    ViewModel() {
 
     val getAllPokemon: Flow<PagingData<PokeBookModel>> =
         pokemonRepository.getfetchPokemons().cachedIn(viewModelScope)
