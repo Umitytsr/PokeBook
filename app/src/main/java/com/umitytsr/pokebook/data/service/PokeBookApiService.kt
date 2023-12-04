@@ -13,6 +13,9 @@ interface PokeBookApiService {
         @Query("offset") offset: Int
     ): PokemonList
 
+    @GET("pokemon?limit=100000&offset=0")
+    suspend fun getSearchPokemon() : PokemonList
+
     @GET("pokemon/{pokemonName}")
     suspend fun getPokemonInfo(@Path("pokemonName") pokemonName: String): Pokemon
 }

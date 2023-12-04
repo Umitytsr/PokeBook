@@ -7,10 +7,12 @@ import androidx.paging.map
 import com.umitytsr.pokebook.data.model.local.PokeBookModel
 import com.umitytsr.pokebook.data.service.PokeBookApiService
 import com.umitytsr.pokebook.data.source.PokeBookPagingSource
+import com.umitytsr.pokebook.domain.toPokeBookModel
+import com.umitytsr.pokebook.domain.toPokeBookModelPaging
 import com.umitytsr.pokebook.util.Constants
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import java.util.Locale
 import javax.inject.Inject
 
 class PokemonRepository @Inject constructor(private val pokeBookApiService: PokeBookApiService) {
@@ -26,20 +28,13 @@ class PokemonRepository @Inject constructor(private val pokeBookApiService: Poke
             pagingSourceFactory = {PokeBookPagingSource(pokeBookApiService)}
         ).flow.map { pagingData ->
             pagingData.map { entry ->
-                val number = extractPokemonNumber(entry.url)
-                val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
-                PokeBookModel(number,entry.name.capitalize(Locale.ROOT),url)
+                entry.toPokeBookModelPaging()
             }
         }
     }
 
-
-
-    private fun extractPokemonNumber(url: String): Int {
-        return if (url.endsWith("/")) {
-            url.dropLast(1).takeLastWhile { it.isDigit() }.toInt()
-        } else {
-            url.takeLastWhile { it.isDigit() }.toInt()
-        }
+    suspend fun getFetchSeach(): Flow<List<PokeBookModel>> = flow {
+        val result = pokeBookApiService.getSearchPokemon().results.toPokeBookModel()
+        emit(result)
     }
 }
