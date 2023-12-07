@@ -10,6 +10,15 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
+val AnaTema = Color(0xFFDC0A2D)
+
+val HPColor = Color(0xFFF5FF00)
+val AtkColor = Color(1f, 0f, 0f, 0.66f)
+val DefColor = Color(0f, 0f, 1f, 0.44f)
+val SpAtkColor = Color(0.671f, 0f, 1f, 0.57f)
+val SpDefColor = Color(1f, 0f, 0.8f, 0.7f)
+val SpdColor = Color(0f, 1f, 0.063f, 0.55f)
+
 val TypeNormal = Color(0xFFAAA67F)
 val TypeFighting = Color(0xFFC12239)
 val TypeFlying = Color(0xFFA891EC)

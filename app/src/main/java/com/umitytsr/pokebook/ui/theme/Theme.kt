@@ -55,7 +55,7 @@ fun PokeBookTheme(
         else -> LightColorScheme
     }
     val view = LocalView.current
-    val statusBar = Color(0xFFDC0A2D).toArgb()
+    val statusBar = Color.Black.toArgb()
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window

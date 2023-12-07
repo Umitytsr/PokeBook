@@ -35,6 +35,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -126,7 +127,7 @@ fun notPokeSearch(startingSearch : MutableState<Boolean>){
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.pokeball_icon),
+            painter = painterResource(id = R.drawable.pokeball_small),
             contentDescription = "",
             modifier = Modifier.size(24.dp),
             colorFilter = ColorFilter.tint(color = Color.White)
@@ -227,7 +228,8 @@ private fun PokeCard(pokemonResult: PokeBookModel?, navController: NavController
                 GlideImage(
                     model = pokemonResult?.imageUrl,
                     contentDescription = "",
-                    modifier = Modifier.size(96.dp)
+                    modifier = Modifier.size(96.dp),
+                    contentScale = ContentScale.Crop
                 )
                 Text(
                     text = "${pokemonResult?.pokemonName?.capitalize()}",

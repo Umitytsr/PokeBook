@@ -3,14 +3,6 @@ package com.umitytsr.pokebook.domain
 import com.umitytsr.pokebook.data.model.local.PokeBookModel
 import com.umitytsr.pokebook.data.model.remote.Result
 
-fun extractPokemonNumber(url: String): Int {
-    return if (url.endsWith("/")) {
-        url.dropLast(1).takeLastWhile { it.isDigit() }.toInt()
-    } else {
-        url.takeLastWhile { it.isDigit() }.toInt()
-    }
-}
-
 fun List<Result>.toPokeBookModel() : List<PokeBookModel>{
     return this.map {
         PokeBookModel(
@@ -27,4 +19,12 @@ fun Result.toPokeBookModelPaging() : PokeBookModel{
         number = extractPokemonNumber(this.url),
         imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${extractPokemonNumber(this.url)}.png"
     )
+}
+
+private fun extractPokemonNumber(url: String): Int {
+    return if (url.endsWith("/")) {
+        url.dropLast(1).takeLastWhile { it.isDigit() }.toInt()
+    } else {
+        url.takeLastWhile { it.isDigit() }.toInt()
+    }
 }
