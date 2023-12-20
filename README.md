@@ -28,5 +28,5 @@
 
 ## Screens
 | Home Screen | Search Screen | Detailer Screen |
-| --- | --- | --- | --- |--- |
+| --- | --- | --- |
 | <img src="screenshots/home_screen.png" width=150/> | <img src="screenshots/search_screen.png" width=150/> | <img src="screenshots/detailer_screen.png" width=150/> |
