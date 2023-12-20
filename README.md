@@ -27,6 +27,6 @@
   - [Timber](https://github.com/JakeWharton/timber)
 
 ## Screens
-| Home Screen | Search Screen | Detailer Screen |
-| --- | --- | --- |
-| <img src="screenshots/home_screen.png" width=150/> | <img src="screenshots/search_screen.png" width=150/> | <img src="screenshots/detailer_screen.png" width=150/> |
+| Home Screen | Search Screen | Detailer Screen | Search Screen 2                                       | Detailer Screen 2                                       |
+| --- | --- | --- |-------------------------------------------------------|---------------------------------------------------------|
+| <img src="screenshots/home_screen.png" width=150/> | <img src="screenshots/search_screen.png" width=150/> | <img src="screenshots/detailer_screen.png" width=150/> | <img src="screenshots/search_screen2.png" width=150/> | <img src="screenshots/detailer_screen2.png" width=150/> |
