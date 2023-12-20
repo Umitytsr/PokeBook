@@ -42,7 +42,7 @@ fun NavGraph() {
             arguments = listOf(navArgument("pokemonName"){type = NavType.StringType})
         ) {
             val pokeName = it.arguments?.getString("pokemonName")
-            DetailerScreen(pokeName = pokeName.toString().toLowerCase())
+            DetailerScreen(pokeName = pokeName.toString().toLowerCase(), navController = navController)
         }
     }
 }

@@ -4,15 +4,16 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.umitytsr.pokebook.R
@@ -49,11 +51,11 @@ import com.umitytsr.pokebook.util.parseStatToAbbr
 import com.umitytsr.pokebook.util.parseStatToColor
 import com.umitytsr.pokebook.util.parseTypeToColor
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailerScreen(
-    pokeName: String
+    pokeName: String,
+    navController: NavController
 ) {
     val viewModel: DetailerScreenViewModel = hiltViewModel()
     val pokeInfo = remember { mutableStateOf<Resource<Pokemon>>(Resource.Loading()) }
@@ -75,105 +77,12 @@ fun DetailerScreen(
             modifier = Modifier.padding(4.dp)
         ) {
             LargePokeball()
-            Column(
+            PokeWrapper(
+                pokeInfo = pokeInfo.value,
+                navController = navController,
                 modifier = Modifier.fillMaxSize()
-            ) {
-                PokeTopBar(
-                    pokeInfo = pokeInfo.value,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(5f)
-                        .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 24.dp)
-                )
-
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    modifier = Modifier
-                        .weight(11f)
-                        .fillMaxSize()
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(start = 20.dp, top = 56.dp, end = 20.dp, bottom = 20.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        pokeInfo.value.data?.types?.let { types ->
-                            LazyRow {
-                                items(types.size) { index ->
-                                    Card(
-                                        shape = RoundedCornerShape(20.dp),
-                                        modifier = Modifier.padding(horizontal = 8.dp),
-                                        colors = CardDefaults.cardColors(
-                                            containerColor = parseTypeToColor(types[index])
-                                        )
-                                    ) {
-                                        Text(
-                                            text = "${types[index].type.name.capitalize(Locale.current)}",
-                                            color = Color.White,
-                                            fontWeight = FontWeight.Bold,
-                                            modifier = Modifier.padding(10.dp),
-                                            fontSize = 18.sp
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = "About", color = Color(0xFFB8B8B8), fontSize = 20.sp)
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            PokeAbout(
-                                pokeInfo = pokeInfo.value.data?.weight,
-                                id = R.drawable.weight,
-                                unit = "kg",
-                                unit2 = "Weight"
-                            )
-                            Spacer(
-                                modifier = Modifier
-                                    .size(width = 2.dp, height = 50.dp)
-                                    .background(color = Color(0xFFE0E0E0))
-                            )
-                            PokeAbout(
-                                pokeInfo = pokeInfo.value.data?.height,
-                                id = R.drawable.height,
-                                unit = "M",
-                                unit2 = "Height"
-                            )
-                        }
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Text(text = "Base State", color = Color(0xFFB8B8B8), fontSize = 20.sp)
-                        Spacer(modifier = Modifier.size(16.dp))
-                        pokeInfo.value.data?.let {
-                            PokemonBaseStats(pokemonInfo = it)
-                        }
-                    }
-                }
-            }
-
-            Box(contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier
-                    .fillMaxHeight(0.4f)
-                    .fillMaxWidth()
-            ) {
-                pokeInfo.value.data?.sprites?.let {
-                    GlideImage(
-                        model = it.frontDefault,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(200.dp)
-                    )
-                }
-
-            }
+            )
+            PokeImage(pokeInfo = pokeInfo.value, modifier = Modifier.fillMaxSize())
         }
     }
 }
@@ -197,9 +106,104 @@ fun LargePokeball() {
 }
 
 @Composable
-fun PokeTopBar(
+fun PokeWrapper(
+    pokeInfo: Resource<Pokemon>,
+    navController: NavController,
+    modifier: Modifier = Modifier
+){
+    Column(
+        modifier = modifier
+    ) {
+        PokeTopBar(
+            pokeInfo = pokeInfo,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(5f)
+                .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 24.dp),
+            navController = navController
+        )
+
+        Card(
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier
+                .weight(11f)
+                .fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 20.dp, top = 56.dp, end = 20.dp, bottom = 20.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                PokeType(pokeInfo = pokeInfo)
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(text = "About", color = Color(0xFFB8B8B8), fontSize = 20.sp)
+                Spacer(modifier = Modifier.size(16.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    PokeAbout(
+                        pokeInfo = pokeInfo.data?.weight,
+                        id = R.drawable.weight,
+                        unit = "kg",
+                        unit2 = "Weight"
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .size(width = 2.dp, height = 50.dp)
+                            .background(color = Color(0xFFE0E0E0))
+                    )
+                    PokeAbout(
+                        pokeInfo = pokeInfo.data?.height,
+                        id = R.drawable.height,
+                        unit = "M",
+                        unit2 = "Height"
+                    )
+                }
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(text = "Base State", color = Color(0xFFB8B8B8), fontSize = 20.sp)
+                Spacer(modifier = Modifier.size(16.dp))
+                pokeInfo.data?.let {
+                    PokemonBaseStats(pokemonInfo = it)
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun PokeImage(
     pokeInfo: Resource<Pokemon>,
     modifier: Modifier = Modifier
+){
+    Box(
+        contentAlignment = Alignment.TopCenter,
+        modifier = modifier
+    ) {
+        pokeInfo.data?.sprites?.let {
+            GlideImage(
+                model = it.frontDefault,
+                contentDescription = "",
+                modifier = Modifier
+                    .size(250.dp)
+                    .offset(y = 60.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun PokeTopBar(
+    pokeInfo: Resource<Pokemon>,
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -212,7 +216,11 @@ fun PokeTopBar(
             Icon(
                 painter = painterResource(id = R.drawable.arrow_back),
                 contentDescription = "",
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable {
+                        navController.popBackStack()
+                    },
                 Color.White
             )
             Spacer(modifier = Modifier.size(8.dp))
@@ -230,6 +238,31 @@ fun PokeTopBar(
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
+    }
+}
+
+@Composable
+fun PokeType(pokeInfo: Resource<Pokemon>){
+    pokeInfo.data?.types?.let { types ->
+        LazyRow {
+            items(types.size) { index ->
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = parseTypeToColor(types[index])
+                    )
+                ) {
+                    Text(
+                        text = "${types[index].type.name.capitalize(Locale.current)}",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(10.dp),
+                        fontSize = 18.sp
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -294,7 +327,7 @@ fun PokemonStat(
     animDuration: Int = 1000,
     animDelay: Int = 0
 ) {
-    var animationPlayed = remember {
+    val animationPlayed = remember {
         mutableStateOf(false)
     }
     val curPercent = animateFloatAsState(
